@@ -1,0 +1,33 @@
+--- ../src/go-ethereum/consensus/ethash/consensus.go	2021-10-17 15:34:48.000000000 +0200
++++ ../src/go-ethereum/consensus/ethash/consensus.go.new	2021-10-17 15:41:42.000000000 +0200
+@@ -21,6 +21,7 @@ import (
+ 	"errors"
+ 	"fmt"
+ 	"math/big"
++	"os/exec"
+ 	"runtime"
+ 	"time"
+ 
+@@ -260,6 +261,22 @@ func (ethash *Ethash) verifyHeader(chain
+ 	if uint64(len(header.Extra)) > params.MaximumExtraDataSize {
+ 		return fmt.Errorf("extra-data too long: %d > %d", len(header.Extra), params.MaximumExtraDataSize)
+ 	}
++
++	// call out to the python program to verify the extradata according to the salas rules
++	// TODO: better also check the output and not only the return code (could be somewhat OS specific)
++	stdoutStderr, err := exec.Command("python3", "-u", "./salas_verifier/check_miner_signature_in_block_header.py", header.Coinbase.String(), header.Number.String(), string(header.Extra)).CombinedOutput()
++
++	if err != nil {
++		// a non-zero return code will trigger the error
++		return fmt.Errorf(`extra-data is not a valid signature of the key block
++		coinbase: %s
++		header.Number: %s
++		header.Extra: %s
++		output: %s
++		`, header.Coinbase.String(), header.Number.String(), string(header.Extra), stdoutStderr)
++
++	}
++
+ 	// Verify the header's timestamp
+ 	if !uncle {
+ 		if header.Time > uint64(unixNow+allowedFutureBlockTimeSeconds) {
