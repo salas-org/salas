@@ -7,7 +7,7 @@ LOCAL_ETH_DATA_PATH=$(pwd)/ethereum_data
 LOCAL_SALAS_CONF_PATH=$(pwd)/salas_conf
 
 VERBOSITY=3
-LOCAL_PORT=30313
+LOCAL_PORT=30303
 EXTRA_FLAGS="--nodiscover"
 
 # run a mining node with an IPC via file geth.ipc in data directory 
