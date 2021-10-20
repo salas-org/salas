@@ -11,4 +11,5 @@ patch $ETHPATH/src/params/protocol_params.go < ./protocol_params.patch
 
 # compile
 cd $ETHPATH/src
+export GOPATH=$ETHPATH
 go install ./...
