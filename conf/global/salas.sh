@@ -5,12 +5,9 @@ NETWORKID=44404440
 CHAINID=$NETWORKID
 
 # bootnode for discovery
-# BOOTNODETCPPORT=30303
-# BOOTNODEUDPPORT=30301
-# dont add the discport
-SALAS_ENODES="enode://01db36f194431efbac2969d7595ec980686cab53e6943fd63becfd43a2f61115406666e0992ab85cefb090890ca8203416819285203fec462f08367ff7a80127@127.0.0.1:30303" 
-# add other bootnodes here
-# BOOTNODES_ENODES="$BOOTNODES_ENODES,"
+SALAS_ENODES="enode://ab6583cb3b5c1248cbf0f7e9e377f2dd6c7fdebb6cb2e1e2d1659ce0621677d41c46f2fd9c354f42d62b76e00d085ed4209c575ee9858a90bf68fdba00f44af4@51.15.202.74:30303" 
+# add other bootnodes here, but leave the discport parameter off
+# SALAS_ENODES="$SALAS_ENODES,"
 
 # go-ethereum source code repo and commit
 GETH_REPO="https://github.com/ethereum/go-ethereum.git"
