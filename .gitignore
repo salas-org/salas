@@ -1,0 +1,7 @@
+ethereum_data/
+ethereum/
+password.txt
+node_address.txt
+miner_address_registered.txt
+secret.ini
+__pycache__/
