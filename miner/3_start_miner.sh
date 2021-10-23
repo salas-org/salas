@@ -7,11 +7,11 @@ MINER_ETH_DATA_PATH=$(pwd)/ethereum_data
 MINER_SALAS_CONF_PATH=$(pwd)/salas_conf
 PASSWORD_FILE_PATH=$(pwd)/password.txt
 VERBOSITY=3
-MINER_PORT=30313
+MINER_PORT=30323
 MINER_GASPRICE_IN_GWEI=1
 
 # get the address of node0 for unlocking the miner
-coinbase=`cat $MINER_SALAS_CONF_PATH/miner_address.txt`
+coinbase=`cat $MINER_SALAS_CONF_PATH/node_address.txt`
 echo "coinbase is $coinbase"
 
 # run a mining node with an IPC via file geth.ipc in data directory 
