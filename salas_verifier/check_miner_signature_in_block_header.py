@@ -2,7 +2,6 @@ from logging import exception
 from web3 import Web3
 from solcx import compile_source
 import argparse
-from certvalidator import CertificateValidator, errors
 import OpenSSL
 from six import u, b, binary_type, PY3
 import subprocess
@@ -131,10 +130,7 @@ def ethereum_handler(w3, other_miner_etherbase, mined_block_nr, signed_key_block
 
     intermediate_certs = chain["intermediate_certs"]['citizen']
     root_cert = chain["root"]
-    #intermediate_certs = bytes(intermediate_certs, 'utf-8')
-    
-    #validator = CertificateValidator(end_entity_cert) #, intermediate_certs=[intermediate_certs])
-    
+        
     # way of working to verify a personal certificate:
     # First trust root, then check intermediate, then trust intermediate, then check personal certificate
     parsed_root = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, root_cert)
