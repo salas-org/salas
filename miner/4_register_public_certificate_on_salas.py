@@ -22,7 +22,7 @@ PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE=config.get('eid
 
 with open('./password.txt') as f:
     account_password = f.read()
-with open('./salas_conf/miner_address.txt') as f:
+with open('./salas_conf/node_address.txt') as f:
     miner_address = f.read()
 
 with open(f'{CONTRACT_PATH}/salas_contract.sol') as f:
