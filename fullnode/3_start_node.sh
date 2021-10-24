@@ -7,8 +7,8 @@ LOCAL_ETH_DATA_PATH=$(pwd)/ethereum_data
 LOCAL_SALAS_CONF_PATH=$(pwd)/salas_conf
 
 VERBOSITY=3
-LOCAL_PORT=30313
 EXTRA_FLAGS="--nodiscover"
+LOCAL_PORT=31323
 
 # run a node with an IPC via file geth.ipc in data directory 
 echo "*******"

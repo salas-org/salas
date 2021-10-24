@@ -7,7 +7,7 @@ MINER_ETH_DATA_PATH=$(pwd)/ethereum_data
 MINER_SALAS_CONF_PATH=$(pwd)/salas_conf
 PASSWORD_FILE_PATH=$(pwd)/password.txt
 VERBOSITY=3
-MINER_PORT=30323
+MINER_PORT=31343
 MINER_GASPRICE_IN_GWEI=1
 
 # get the address of node0 for unlocking the miner
