@@ -11,5 +11,5 @@ esac
 
 # removing data from chain
 echo "removing $ETHPATH (if exists)"
-if [ -d "$WORKING_DIR" ]; then chmod -R 777 $ETHPATH; fi
-if [ -d "$WORKING_DIR" ]; then rm -rf $ETHPATH; fi   
+if [ -d "$ETHPATH" ]; then echo "found $ETHPATH, modifying permissions"; chmod -R 777 $ETHPATH; fi
+if [ -d "$ETHPATH" ]; then echo "found $ETHPATH, removing"; rm -rf $ETHPATH; fi   
