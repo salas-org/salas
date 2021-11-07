@@ -1,0 +1,28 @@
+# Pull Geth into a second stage deploy alpine container
+FROM python:3-alpine
+
+RUN apk add --no-cache ca-certificates
+RUN apk update && apk add python3-dev gcc libc-dev
+                        
+RUN pip install --upgrade pip setuptools
+RUN pip install py-solc-x web3
+
+ENV ENV="/root/.profile"
+RUN echo 'alias ll="ls -alsh"' >> /root/.profile
+
+# get our modified geth
+# COPY /cmd/geth /usr/local/bin/
+COPY /cmd/geth /salas/cmd/geth
+
+
+# copy the salas python code (the ethereum_data is not copied cause it is in the .dockerignore file)
+ADD ./miner/ /salas/miner/
+# copy the configuration (the ethereum_data is not copied cause it is in the .dockerignore file)
+ADD ./conf/ /salas/conf
+
+# for websocket
+#EXPOSE 8545 8546 31313 31313/udp
+# no websocket
+EXPOSE 8545 31313 31313/udp
+
+# ENTRYPOINT ["geth"]

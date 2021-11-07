@@ -57,16 +57,13 @@ def calc_block_to_sign(recent_block_nr: int) -> int:
 
     return block_to_sign_nr
 
-def w3_provider(ipc_path=IPC_PATH):
-    return Web3(Web3.IPCProvider(ipc_path))
+def w3_provider(w3=Web3(Web3.IPCProvider(IPC_PATH))):
+    # little hack: default parameter are only evaluated once by the interpreter
+    return w3
 
-def ethereum_handler(w3, other_miner_etherbase, mined_block_nr, signed_key_block_hash):
-    
-    # test to see if we already have a salas contract
-    # if not than just return okay
-    if contract_deployed != '1' or mined_block_nr<=130:
-        print("contract not yet deployed? or header block nr small")
-        return 0
+def get_latest_event_from_address_to_contract(topic_from_address, w3=w3_provider()):
+
+    w3 = w3_provider()
 
     # get the contract, bytecode and ABI
     with open(CONTRACT_PATH) as f:
@@ -75,21 +72,10 @@ def ethereum_handler(w3, other_miner_etherbase, mined_block_nr, signed_key_block
     contract_id, contract_interface = compiled_sol.popitem()
     abi = contract_interface['abi']
 
-    ###################
-    # Check whether the public certificate is valid given the known intermediate and root certificate
-    ###################
     salas = w3.eth.contract(address=SALAS_CONTRACT_ADDRESS, abi=abi)
     salas_event = salas.events.RegisteredAddress()
 
-    # get the events from the transaction from the etherbase to the salas contract address
-    # address = 0x65219b02605c8C6A0451f621D7898D7354dFe86b
-    # event RegisteredAddress(address indexed senderAddress, string id_chain, string public_key, string signed_address);
-    
-    # WORKING
-    other_miner_etherbase = other_miner_etherbase[3:-1]  #is enclosed in '0x ....'  (including the quotes)
-    topic_from_address = '0x000000000000000000000000' + other_miner_etherbase
-    print(f"verifying block from miner with etherbase {topic_from_address}")
-
+    # find the latest event
     event_signature_hash = w3.keccak(text="RegisteredAddress(address,string,string,string)").hex()
     event_filter = w3.eth.filter({
         "fromBlock": 0,
@@ -98,7 +84,7 @@ def ethereum_handler(w3, other_miner_etherbase, mined_block_nr, signed_key_block
                 topic_from_address],  #from address == miner address
         })
     events = event_filter.get_all_entries()
-    print(f"retrieved {len(events)} event log entries from the contract and for this miner")
+    #print(f"retrieved {len(events)} event log entries from the contract and for this miner")
 
     # decode the data of the last event (is it always the last in time?)
     if len(events) == 0:
@@ -107,7 +93,6 @@ def ethereum_handler(w3, other_miner_etherbase, mined_block_nr, signed_key_block
     event = events[-1]
     event_data = event.data
     event_decoded = salas_event.processLog(event)
-    print(event_decoded)
     # data in event
     # event_decoded.args.senderAddress
     # event_decoded.args.id_chain
@@ -120,7 +105,33 @@ def ethereum_handler(w3, other_miner_etherbase, mined_block_nr, signed_key_block
     # event_decoded.address
     # event_decoded.blockHash
     # event_decoded.blockNumber
+    return event_decoded
+
+def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_hash):
     
+    w3 = w3_provider()
+
+    # test to see if we already have a salas contract
+    # if not than just return okay
+    if contract_deployed != '1' or mined_block_nr<=130:
+        print("contract not yet deployed? or header block nr small")
+        return 0
+
+    # get the events from the transaction from the etherbase to the salas contract address
+    # address = 0x65219b02605c8C6A0451f621D7898D7354dFe86b
+    # event RegisteredAddress(address indexed senderAddress, string id_chain, string public_key, string signed_address);
+    
+    # WORKING
+    other_miner_etherbase = other_miner_etherbase[3:-1]  #is enclosed in '0x ....'  (including the quotes)
+    topic_from_address = '0x000000000000000000000000' + other_miner_etherbase
+    print(f"verifying block from miner with etherbase {topic_from_address}")
+
+    event_decoded = get_latest_event_from_address_to_contract(topic_from_address, w3)
+
+    ###################
+    # Check whether the public certificate is valid given the known intermediate and root certificate
+    ###################
+
     # get the public key, get the id_chain, make the complete certificate chain
     chain_id = event_decoded.args.id_chain
     chain = cc_map[chain_id]
@@ -233,7 +244,7 @@ def main():
     mined_block_nr = int(args.mined_block_nr)
     signed_key_block_hash_in_base64 = args.mined_block_extradata
     
-    ethereum_handler(w3_provider(), etherbase, mined_block_nr, signed_key_block_hash_in_base64)
+    ethereum_handler(etherbase, mined_block_nr, signed_key_block_hash_in_base64)
 
     sys.stdout.write('{"result": "verification succesful"}\n')
     sys.stdout.flush()

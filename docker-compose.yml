@@ -1,0 +1,42 @@
+version: "0.1"
+services:
+  salas_miner:
+    build: 
+      context: .
+      args:
+        gethrepo: $GETH_REPO
+    ports:
+      - "8545:8545"
+      - "31313:31313"
+    entrypoint: /bin/bash -c
+    command: >
+      "(cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner.sh)
+      && (cd /salas/miner/ && pkcs11-tool )
+      # && (cd /salas/miner/ && ./3_start_miner.sh &) 
+      # && (sleep 10) 
+      && (cd /salas/miner/ && python3 ./5_start_salas_mining.py)"
+    env_file:
+      - .env.cmds
+      - .env.secrets
+      - .env
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t      
+    privileged: true
+    devices:
+      - "/dev/:/dev/"
+  # salas_miner_eid:
+  #   depends_on:
+  #     salas_miner:
+  #       condition: service_started
+  #   entrypoint: /bin/bash -c
+  #   command: >
+  #     "cd /salas/miner
+  #     && python3 ./5_start_salas_mining.py"
+  #   build: 
+  #     context: .
+  #     args:
+  #       gethrepo: $GETH_REPO
+  #   env_file:
+  #     - .env.cmds
+  #     - .env.secrets
+  #     - .env

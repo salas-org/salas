@@ -5,13 +5,13 @@ import time
 import subprocess
 import pathlib as pl
 import base64
-from configparser import ConfigParser
+import configparser
 
 # this python program will output the signature (with your private key from an eid) of a previous block's hash (called key block)
 
 IPC_PATH = './ethereum_data/geth.ipc'
 
-config = ConfigParser()
+config = configparser.ConfigParser()
 config.read('../conf/global/salas.ini')
 NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM = config.getint('key block', 'NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM')  # should never sign a block less that x blocks ago
 NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO = config.getint('key block', 'NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO') # only consider the most recent block which is a multiple of this value (and which is not more recent than NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM)
@@ -20,8 +20,15 @@ SIGN_KEY=config.get('beid', 'SIGN_KEY')
 SIGN_METHOD=config.get('beid', 'SIGN_METHOD')
 SECONDS_TO_SLEEP=config.getint('main', 'SECONDS_TO_SLEEP')
 OFFSET=config.getint('main', 'OFFSET')
-config.read('./secret.ini')
-PIN=config.get('eid', 'PIN')
+
+config.read('./secrets/secret.ini')
+try:
+    PIN=config.get('eid', 'PIN')
+except configparser.NoSectionError as err:
+    # probably the secret.ini file does not exist 
+    # let's try the env
+    import os
+    PIN=os.environ['PIN']
 
 def calc_block_to_sign(recent_block_nr: int) -> int:
     # get the block of which we need to sign the hash

@@ -1,4 +1,4 @@
-source ../conf/0_load_conf.sh
+source ../../conf/0_load_conf.sh
 
 TCP_DEFAULT_PORT_ETHEREUM=30303
 
@@ -7,8 +7,8 @@ echo "pulling geth (go-ethereum) to $ETHPATH"
 git clone $GETH_REPO $ETHPATH/src
 
 # patch
-patch $ETHPATH/src/consensus/ethash/consensus.go < ./consensus.patch
-patch $ETHPATH/src/params/protocol_params.go < ./protocol_params.patch
+patch --forward $ETHPATH/src/consensus/ethash/consensus.go < ./consensus.patch
+patch --forward $ETHPATH/src/params/protocol_params.go < ./protocol_params.patch
 
 # change the default port 30303 to 31313 (skip the .github directory). It finds file and pipes them into sed for inplace replace
 # -i ".bak" needed for macos
@@ -26,3 +26,6 @@ done
 cd $ETHPATH/src
 export GOPATH=$ETHPATH
 go install ./...
+
+# copy the geth command to the salas directory
+mkdir -p $SALAS_DIR/cmd && cp $ETHPATH/bin/geth $SALAS_DIR/cmd

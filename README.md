@@ -6,7 +6,7 @@
 ## Install
 Execute the following commands on a standard ubuntu. First let's install the dependencies, then salas itself.
 
-### Install the dependencies (on linux Ubuntu)
+### Install the dependencies (tested on linux Ubuntu)
 
 + `apt update && apt -y upgrade`
 + `wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz`
@@ -19,9 +19,12 @@ Execute the following commands on a standard ubuntu. First let's install the dep
 ### Install salas
 
 + `git clone https://github.com/salas-org/salas.git`
-+ `cd salas/install`
++ `cd salas/install/local_install`
 + `./1_clean_code.sh  # not needed on a first install` 
 + `./2_get_ethereum_and_patch_and_compile.sh`
+
+## Dockerfile
+The dockerfiles can be found salas/install/docker_install. Please use the `make_docker_from_scratch.sh` or the `make_docker_from_local.sh` (the latter only works if you have installed and compiled salas locally).
 
 ## For developer
 Starting a bootnode:
@@ -42,16 +45,8 @@ Make sure you setup a firewall rule to allow incoming tcp traffic on port 31313 
 # LIcense info
 ## Salas License
 
-All salas code is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), also
-included in our repository in the `COPYING` file.
-
+All salas code is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), also included in our repository in the `COPYING` file.
 
 ## Ethereum License
 
-The go-ethereum library (i.e. all code outside of the `ethereum/src/cmd` directory but inside the `ethereum` directory) is licensed under the
-[GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html),
-also included in our repository in the `COPYING.LESSER` file.
-
-The go-ethereum binaries (i.e. all code inside of the `ethereum/src/cmd` directory) is licensed under the
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), also
-included in our repository in the `COPYING` file.
+Can be found at https://github.com/ethereum/go-ethereum/ . 

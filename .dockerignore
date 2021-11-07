@@ -1,9 +1,8 @@
-ethereum_data/
-ethereum/
+**/ethereum_data/
+**/secrets/
+**/secret/
 password.txt
 node_address.txt
 miner_address_registered.txt
 secret.ini
-.env.secrets
-*secret*
 __pycache__/
