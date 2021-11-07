@@ -8,7 +8,7 @@ LOCAL_SALAS_CONF_PATH=$(pwd)/salas_conf
 
 VERBOSITY=3
 LOCAL_PORT=31313
-EXTRA_FLAGS="--nodiscover"
+# EXTRA_FLAGS="--nodiscover"
 
 # run a mining node with an IPC via file geth.ipc in data directory 
 echo "*******"

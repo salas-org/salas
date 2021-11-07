@@ -8,7 +8,9 @@ LOCAL_SALAS_CONF_PATH=$(pwd)/salas_conf
 
 VERBOSITY=3
 LOCAL_PORT=31323
-EXTRA_FLAGS="--nodiscover --http --http.api eth,net,web3,personal --http.corsdomain '*' "
+#EXTRA_FLAGS="--nodiscover --http --http.api eth,net,web3,personal --http.corsdomain '*' "
+# this is probably not yet secure
+EXTRA_FLAGS="--http --http.api eth,net,web3,personal --http.corsdomain '*' "
 
 # run a node with an IPC via file geth.ipc in data directory 
 echo "*******"
