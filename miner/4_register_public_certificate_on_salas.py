@@ -3,12 +3,11 @@ from web3 import Web3
 from solcx import compile_source
 import subprocess
 import pprint
-from configparser import ConfigParser
 
 IPC_PATH = './ethereum_data/geth.ipc'
 CONTRACT_PATH = '../salas_contract'
 
-config = ConfigParser()
+config = configparser.ConfigParser()
 config.read('../conf/global/salas.ini')
 SALAS_CONTRACT_ADDRESS = config.get('main', "SALAS_CONTRACT_ADDRESS")
 SALAS_CONTRACT_COST = config.get('main', 'SALAS_CONTRACT_COST')

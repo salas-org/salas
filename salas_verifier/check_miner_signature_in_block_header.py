@@ -174,20 +174,22 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
     # Check whether the corresponding private key was used to sign the miner's keccak256 address
     ###################
 
-    hex_signature = event_decoded.args.signed_address
-    bytes_signature = bytes.fromhex(hex_signature)
+    # removed this check. Otherwise difficult to start mining on the chain, catch 22 (no salas, no mining... no salas earned...)
 
-    try:
-        OpenSSL.crypto.verify(parsed_cert
-            , bytes_signature
-            , '0x' + other_miner_etherbase, 
-            'sha1')
+    # hex_signature = event_decoded.args.signed_address
+    # bytes_signature = bytes.fromhex(hex_signature)
 
-    except Exception as err:
-        print('Could not verify the signature of the keccak256_address with the linked public key')
-        raise err
+    # try:
+    #     OpenSSL.crypto.verify(parsed_cert
+    #         , bytes_signature
+    #         , '0x' + other_miner_etherbase, 
+    #         'sha1')
 
-    print(f"private key used to sign the address corresponds to the public key in the certificate")
+    # except Exception as err:
+    #     print('Could not verify the signature of the keccak256_address with the linked public key')
+    #     raise err
+
+    # print(f"private key used to sign the address corresponds to the public key in the certificate")
 
     ###################
     # Check whether the mined block extradata is the key block hash that is signed by the same private key
