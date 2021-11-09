@@ -1,4 +1,7 @@
 ethereum_data/
+keystore*
+keystore_backup/
+UTC--*
 ethereum/
 password.txt
 node_address.txt
