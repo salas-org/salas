@@ -7,3 +7,5 @@ secret.ini
 .env.secrets
 *secret*
 __pycache__/
+# exceptions (will not be ignored)
+!.tmp.env.secrets

@@ -6,4 +6,3 @@ node_address.txt
 miner_address_registered.txt
 secret.ini
 __pycache__/
-!.tmp.env.secrets
