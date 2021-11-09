@@ -1,4 +1,4 @@
-version: "0.1"
+version: "2"
 services:
   salas_miner:
     build: 
@@ -9,11 +9,13 @@ services:
       - "8545:8545"
       - "31313:31313"
     entrypoint: /bin/bash -c
+    # command: >
+      # "tail -f /dev/null"
     command: >
-      "(cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner.sh)
-      && (cd /salas/miner/ && pkcs11-tool -M)
-      # && (cd /salas/miner/ && ./3_start_miner.sh &) 
-      # && (sleep 10) 
+      "(pcscd) 
+      && (cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner.sh)
+      && (cd /salas/miner/ && ./3_start_miner.sh &) 
+      && (sleep 10) 
       && (cd /salas/miner/ && python3 ./5_start_salas_mining.py)"
     env_file:
       - .env.cmds
@@ -22,8 +24,8 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t      
     privileged: true
-    devices:
-      - "/dev/:/dev/"
+    # devices:
+    #   - "/dev/:/dev/"
   # salas_miner_eid:
   #   depends_on:
   #     salas_miner:

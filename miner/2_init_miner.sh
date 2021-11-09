@@ -26,6 +26,7 @@ fi
 output=$($SALAS_DIR/cmd/geth --datadir $LOCAL_ETH_DATA_PATH/ --password $PASSWORD_FILE_PATH account new)
 address=$(echo "$output" | grep -i 'public address of the key' | tr -s ' ' | cut -d ' ' -f 6)
 echo "Public miner address is $address"
+mkdir -p "$LOCAL_SALAS_CONF_PATH" || true
 echo -n "$address" > "$LOCAL_SALAS_CONF_PATH/node_address.txt"
 
 # init the miner with the genesis file

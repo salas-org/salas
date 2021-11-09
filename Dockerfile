@@ -44,7 +44,7 @@ RUN apk add gcc libc-dev
 
 RUN pip install --upgrade pip setuptools
 RUN pip install web3
-RUN apk add git opensc
+RUN apk add git opensc ccid pcsc-lite-libs
 
 #RUN python3 -c "import solcx; solcx.install_solc('0.8.9')"
 

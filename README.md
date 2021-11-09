@@ -24,7 +24,9 @@ Execute the following commands on a standard ubuntu. First let's install the dep
 + `./2_get_ethereum_and_patch_and_compile.sh`
 
 ## Dockerfile
-The dockerfiles can be found salas/install/docker_install. Please use the `make_docker_from_scratch.sh` or the `make_docker_from_local.sh` (the latter only works if you have installed and compiled salas locally).
++ make a file with your secrets `cp .tmp.env.secrets .env.secrets` , and fill in the values for PIN and ID_CHAIN in the .env.secrets file. Tip: Do not use a space key around the equal sign.
++ `docker-compose build`
++ `docker-compose run` # this will start a container with your miner code
 
 ## For developer
 Starting a bootnode:
