@@ -24,11 +24,13 @@ OFFSET=config.getint('main', 'OFFSET')
 config.read('./secrets/secret.ini')
 try:
     PIN=config.get('eid', 'PIN')
+    ID_CHAIN=config.get('eid', 'ID_CHAIN')
 except configparser.NoSectionError as err:
     # probably the secret.ini file does not exist 
     # let's try the env
     import os
     PIN=os.environ['PIN']
+    ID_CHAIN=os.environ['ID_CHAIN']
 
 def calc_block_to_sign(recent_block_nr: int) -> int:
     # get the block of which we need to sign the hash
@@ -92,13 +94,21 @@ def main():
             
             if signing_process_2.returncode == 0 :
                 # signature was succesful, instruct the miner to use it as extradata
+                # current signature length is 2048bits, adds up to 342 in base64
+                # rounded up to 4 because of base64 padding == 344 bytes
+                # the extra 8 bytes are used for the chain id (4 chars), and future provisioning
                 signed_hash = signing_process_2_output.strip()
                 signed_hash_base64 = base64.b64encode(signed_hash)
                 print(f"len of signed hash is {len(signed_hash)}")
                 print(f'base64 signed hash is {signed_hash_base64}')
                 print(f"padding up to 352 len of base64 {signed_hash_base64.decode('ascii').ljust(352, '=')}")
-
-                w3.geth.miner.set_extra(signed_hash_base64.decode('ascii').ljust(352, "="))  # extra padding the base64 to fill the extradata
+                extradata_string = ID_CHAIN.zfill(4)
+                extradata_string = extradata_string + 'SL01'
+                extradata_string = extradata_string + signed_hash_base64.decode('ascii')
+                extradata_string = extradata_string.ljust(352, "=")
+                print(f"prefixing with id of the cert chain, and salas identifier {extradata_string}")
+                
+                w3.geth.miner.set_extra(extradata_string)
                 last_signed_block_nr = block_to_sign_nr
                 nr_successive_failed_attempts = 0
 
