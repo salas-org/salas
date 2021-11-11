@@ -15,7 +15,7 @@ You can probably get it to run on macos based on the dockerfile and on the instr
 + `docker-compose build`
 + `docker-compose run` # this will start a container with your miner code
 + You should now copy your key to keep it save with `docker cp my_container_id:/salas/miner/ethereum_data/keystore ./keystore_backup`
-+ For subsequent runs of your miner container, please use `docker-compose start` and `docker-compose stop`. You can check the state of your container with `docker ps -a`.
++ For subsequent runs of your miner container, please use `docker-compose stop` and `docker-compose restart salas_miner`. You can check the state of your container with `docker-compose ps` or `docker ps -a`.
 
 ### Native on Linux
 
