@@ -13,9 +13,9 @@ You can probably get it to run on macos based on the dockerfile and on the instr
 
 + make a file with your secrets `cp .tmp.env.secrets .env.secrets` , and fill in the values for PIN and ID_CHAIN in the .env.secrets file. Tip: Do not use a space key around the equal sign.
 + `docker-compose build`
-+ `docker-compose run` # this will start a container with your miner code
-+ You should now copy your key to keep it save with `docker cp my_container_id:/salas/miner/ethereum_data/keystore ./keystore_backup`
++ `docker-compose run` # this will start a container with your miner code`
 + For subsequent runs of your miner container, please use `docker-compose stop` and `docker-compose restart salas_miner`. You can check the state of your container with `docker-compose ps` or `docker ps -a`.
++ IMPORTANT: your personal keystore file can be found in the ./vol_keystore directory on the host. Copy this to a save place.
 
 ### Native on Linux
 

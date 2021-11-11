@@ -9,7 +9,7 @@ import configparser
 
 # this python program will output the signature (with your private key from an eid) of a previous block's hash (called key block)
 
-IPC_PATH = './ethereum_data/geth.ipc'
+IPC_PATH = '/salas/miner/geth.ipc'
 
 config = configparser.ConfigParser()
 config.read('../conf/global/salas.ini')

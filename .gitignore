@@ -11,9 +11,11 @@ miner_address_registered.txt
 vol_*
 vol_keystore
 vol_conf
+vol_data
 secret.ini
 .env.secrets
 *secret*
+geth.ipc
 __pycache__/
 # exceptions (will not be ignored)
 !.tmp.env.secrets

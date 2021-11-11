@@ -4,7 +4,7 @@ from solcx import compile_source
 import subprocess
 import pprint
 
-IPC_PATH = './ethereum_data/geth.ipc'
+IPC_PATH = './geth.ipc'
 CONTRACT_PATH = '../salas_contract'
 
 config = configparser.ConfigParser()

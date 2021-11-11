@@ -12,6 +12,7 @@ services:
     volumes:
       - ./vol_keystore:/salas/miner/keystore
       - ./vol_conf:/salas/miner/conf
+      - ./vol_data:/salas/miner/ethereum_data
     command: >
       "(pcscd) 
       && (cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner.sh)

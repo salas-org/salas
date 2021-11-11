@@ -6,7 +6,7 @@ import configparser
 #from solcx import install_solc
 #install_solc(version='latest')
 
-IPC_PATH = '../miner/ethereum_data/geth.ipc'
+IPC_PATH = '../miner/geth.ipc'
 with open('./password.txt') as f:
     password = f.read()
 with open('./salas_contract.sol') as f:

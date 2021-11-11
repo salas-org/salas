@@ -17,7 +17,7 @@ from cert_chains.cc_mapping import chain_id_mappings as cc_map
 # and also checks whether the corresponding private key was used to sign the address of the miner 
 #############
 
-IPC_PATH = '../miner/ethereum_data/geth.ipc'
+IPC_PATH = '../miner/geth.ipc'
 PATH_ = '../salas_contract'
 
 config = configparser.ConfigParser()
