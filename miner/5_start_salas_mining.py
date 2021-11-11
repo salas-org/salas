@@ -102,8 +102,8 @@ def main():
                 print(f"len of signed hash is {len(signed_hash)}")
                 print(f'base64 signed hash is {signed_hash_base64}')
                 print(f"padding up to 352 len of base64 {signed_hash_base64.decode('ascii').ljust(352, '=')}")
-                extradata_string = ID_CHAIN.zfill(4)
-                extradata_string = extradata_string + 'SL01'
+                extradata_string = 'S001'
+                extradata_string = extradata_string + '0000'
                 extradata_string = extradata_string + signed_hash_base64.decode('ascii')
                 extradata_string = extradata_string.ljust(352, "=")
                 print(f"prefixing with id of the cert chain, and salas identifier {extradata_string}")
