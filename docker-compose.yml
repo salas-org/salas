@@ -9,8 +9,9 @@ services:
       - "8545:8545"
       - "31313:31313"
     entrypoint: /bin/bash -c
-    # command: >
-      # "tail -f /dev/null"
+    volumes:
+      - ./vol_keystore:/salas/miner/keystore
+      - ./vol_conf:/salas/miner/conf
     command: >
       "(pcscd) 
       && (cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner.sh)
@@ -23,7 +24,7 @@ services:
       - .env
     stdin_open: true # docker run -i
     tty: true        # docker run -t      
-    privileged: true
+    privileged: true # needed for the smartcard, but a little to insecure maybe
     # devices:
     #   - "/dev/:/dev/"
   # salas_miner_eid:

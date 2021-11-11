@@ -26,7 +26,7 @@ SALAS_CONTRACT_ADDRESS=config.get('main', 'SALAS_CONTRACT_ADDRESS')
 NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM = config.getint('key block', 'NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM')  # should never sign a block less that x blocks ago
 NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO = config.getint('key block', 'NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO') # only consider the most recent block which is a multiple of this value (and which is not more recent than NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM)
 
-CONTRACT_DEPLOYED = PATH_ + '/salas_conf/contract_deployed.txt'
+CONTRACT_DEPLOYED = PATH_ + '/conf/contract_deployed.txt'
 CONTRACT_PATH= PATH_ + '/salas_contract.sol'
 SLACK_ON_OFFSET_FOR_KEYBLOCK = 4
 

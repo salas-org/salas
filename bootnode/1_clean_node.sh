@@ -1,6 +1,6 @@
 
 LOCAL_ETH_DATA_PATH=$(pwd)/ethereum_data
-LOCAL_SALAS_CONF_PATH=$(pwd)/salas_conf
+LOCAL_SALAS_CONF_PATH=$(pwd)/conf
 
 # need write on all directories for the deletes to succeed
 read -p "This will remove all salas data for this node from your system. Do you want to continue? y/n [n] " yn

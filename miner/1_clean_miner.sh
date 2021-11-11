@@ -1,6 +1,7 @@
 
 MINER_ETH_DATA_PATH=$(pwd)/ethereum_data
-MINER_SALAS_CONF_PATH=$(pwd)/salas_conf
+MINER_SALAS_CONF_PATH=$(pwd)/conf
+MINER_KEYSTORE_PATH=$(pwd)/keystore
 
 if [ $CLEAN_MINER == "yes" ]; then
     echo "cleaning all miner data... hope you know what you're doing..."
@@ -13,6 +14,9 @@ fi
 echo "removing $MINER_ETH_DATA_PATH"
 rm -rf $MINER_ETH_DATA_PATH
 mkdir $MINER_ETH_DATA_PATH
+
+# NOT removing the keystore, that should be done from the host machine in the mounted volume
+echo "NOT removing the keystore at $MINER_KEYSTORE_PATH, you need to do this manually if needed"
 
 # cleanup the miner
 mkdir -p $MINER_SALAS_CONF_PATH || true

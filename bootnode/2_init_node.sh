@@ -4,7 +4,7 @@
 source ../conf/0_load_conf.sh
 
 LOCAL_ETH_DATA_PATH=$(pwd)/ethereum_data
-LOCAL_SALAS_CONF_PATH=$(pwd)/salas_conf
+LOCAL_SALAS_CONF_PATH=$(pwd)/conf
 PASSWORD_FILE_PATH=$(pwd)/password.txt
 
 read -p "This could remove all your node data from your system. Do you want to continue? y/n [n] " yn

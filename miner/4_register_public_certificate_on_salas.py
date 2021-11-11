@@ -30,7 +30,7 @@ except configparser.NoSectionError as err:
 
 with open('./secrets/password.txt') as f:
     account_password = f.read()
-with open('./salas_conf/node_address.txt') as f:
+with open('./conf/node_address.txt') as f:
     miner_address = f.read()
 
 with open(f'{CONTRACT_PATH}/salas_contract.sol') as f:
@@ -118,7 +118,7 @@ if len(latest_event) != 0:
 # calculate the signature of the address of the client/miner
 # TODO: get from environment and check the stdout from the subprocess
 print(f"signing miner address {miner_address} with private key ")
-signing_process_1 = subprocess.run([f"cat", "./salas_conf/miner_address.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+signing_process_1 = subprocess.run([f"cat", "./conf/miner_address.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 signing_process_2 = subprocess.run(["pkcs11-tool", f"-p{PIN}", f"-d{SIGN_KEY}", "-s", f"-m{SIGN_METHOD}"], 
                                     input=signing_process_1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 print(f"signing...")                                    
@@ -148,5 +148,5 @@ pprint.pprint(dict(tx_receipt))
 print("\nWas transaction successful?")
 pprint.pprint(tx_receipt["status"])
 
-with open("./salas_conf/miner_address_registered.txt", "w") as f:
+with open("./conf/miner_address_registered.txt", "w") as f:
     f.write("1")

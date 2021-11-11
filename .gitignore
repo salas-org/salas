@@ -1,11 +1,16 @@
 ethereum_data/
+keystore/*
+keystore/**
+keystore/
 keystore*
-keystore_backup/
 UTC--*
 ethereum/
 password.txt
 node_address.txt
 miner_address_registered.txt
+vol_*
+vol_keystore
+vol_conf
 secret.ini
 .env.secrets
 *secret*
