@@ -86,67 +86,72 @@ def get_latest_event_from_address_to_contract(topic_from_address, w3=w3_provider
     # event_decoded.blockNumber
     return event_decoded
 
-# get web3.py instance, and unlock the default account
-try:
-    w3 = w3_provider()
-    w3.geth.personal.unlock_account(miner_address, account_password, 600)
-    print(f'miner address is {miner_address}')
-    print(f'current balance on address is {w3.eth.get_balance(miner_address)}')
-except FileNotFoundError as err:
-    print("Can't connect to your IPC / server")
-    raise err
+def main():
+    
+    # get web3.py instance, and unlock the default account
+    try:
+        w3 = w3_provider()
+        w3.geth.personal.unlock_account(miner_address, account_password, 600)
+        print(f'miner address is {miner_address}')
+        print(f'current balance on address is {w3.eth.get_balance(miner_address)}')
+    except FileNotFoundError as err:
+        print("Can't connect to your IPC / server")
+        raise err
 
-# get the contract, bytecode and ABI
-compiled_sol = compile_source(solidity_code)
-contract_id, contract_interface = compiled_sol.popitem()
-abi = contract_interface['abi']
+    # get the contract, bytecode and ABI
+    compiled_sol = compile_source(solidity_code)
+    contract_id, contract_interface = compiled_sol.popitem()
+    abi = contract_interface['abi']
 
-###################
-# execute functions on the contract 
-###################
-salas_contract = w3.eth.contract(address=SALAS_CONTRACT_ADDRESS, abi=abi)
+    ###################
+    # execute functions on the contract 
+    ###################
+    salas_contract = w3.eth.contract(address=SALAS_CONTRACT_ADDRESS, abi=abi)
 
-# call a view
-cost_in_wei = salas_contract.functions.getCost().call()
-print(cost_in_wei)
+    # call a view
+    cost_in_wei = salas_contract.functions.getCost().call()
+    print(cost_in_wei)
 
-latest_event = get_latest_event_from_address_to_contract(miner_address[2:])
-if len(latest_event) != 0:
-    print("assuming this address is already registered")
-    exit(0)
+    latest_event = get_latest_event_from_address_to_contract(miner_address[2:])
+    if len(latest_event) != 0:
+        print("assuming this address is already registered")
+        exit(0)
 
-# calculate the signature of the address of the client/miner
-# TODO: get from environment and check the stdout from the subprocess
-print(f"signing miner address {miner_address} with private key ")
-signing_process_1 = subprocess.run([f"cat", "./conf/miner_address.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-signing_process_2 = subprocess.run(["pkcs11-tool", f"-p{PIN}", f"-d{SIGN_KEY}", "-s", f"-m{SIGN_METHOD}"], 
-                                    input=signing_process_1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-print(f"signing...")                                    
-signing_process_2_output = signing_process_2.stdout.hex()
-print(f"retrieved hex output")
-if signing_process_2.returncode == 0 :
-    signed_address = signing_process_2_output
-    print(f'signed address is {signed_address}')
+    # calculate the signature of the address of the client/miner
+    # TODO: get from environment and check the stdout from the subprocess
+    print(f"signing miner address {miner_address} with private key ")
+    signing_process_1 = subprocess.run([f"cat", "./conf/miner_address.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    signing_process_2 = subprocess.run(["pkcs11-tool", f"-p{PIN}", f"-d{SIGN_KEY}", "-s", f"-m{SIGN_METHOD}"], 
+                                        input=signing_process_1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"signing...")                                    
+    signing_process_2_output = signing_process_2.stdout.hex()
+    print(f"retrieved hex output")
+    if signing_process_2.returncode == 0 :
+        signed_address = signing_process_2_output
+        print(f'signed address is {signed_address}')
 
-else:
-    print(f'signing address failed')
-    print(f'output was {signing_process_2_output}')
-    quit()
+    else:
+        print(f'signing address failed')
+        print(f'output was {signing_process_2_output}')
+        quit()
 
-# call a transactions / change the state on the blockchain
-tx_hash = salas_contract.functions.registerAddress(ID_CHAIN
-                                 , PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE
-                                 , signed_address).transact({
-                                     'from': miner_address,
-                                     'to': SALAS_CONTRACT_ADDRESS,
-                                     'value': SALAS_CONTRACT_COST
-                                 })
-tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    # call a transactions / change the state on the blockchain
+    tx_hash = salas_contract.functions.registerAddress(ID_CHAIN
+                                    , PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE
+                                    , signed_address).transact({
+                                        'from': miner_address,
+                                        'to': SALAS_CONTRACT_ADDRESS,
+                                        'value': SALAS_CONTRACT_COST
+                                    })
+    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
-print("Transaction receipt mined:")
-pprint.pprint(dict(tx_receipt))
-print("\nWas transaction successful?")
-pprint.pprint(tx_receipt["status"])
+    print("Transaction receipt mined:")
+    pprint.pprint(dict(tx_receipt))
+    print("\nWas transaction successful?")
+    pprint.pprint(tx_receipt["status"])
 
-with open("./conf/miner_address_registered.txt", "w") as f:
-    f.write("1")
+    with open("./conf/miner_address_registered.txt", "w") as f:
+        f.write("1")
+
+if __name__ == '__main__':
+    main()
