@@ -43,22 +43,25 @@ RUN apk add --no-cache ca-certificates
 RUN apk add gcc libc-dev 
 
 RUN pip install --upgrade pip setuptools
-RUN pip install web3
-RUN apk add git opensc ccid pcsc-lite-libs
+RUN pip install web3 
+RUN apk add git opensc ccid pcsc-lite-libs openssl
 
-#RUN python3 -c "import solcx; solcx.install_solc('0.8.9')"
+RUN pip install py-solc-x
+RUN python3 -c "import solcx; solcx.compile_solc('0.8.9')"
+RUN pip install flask
 
-RUN git clone https://github.com/iamdefinitelyahuman/py-solc-x.git /py-solc-x
-RUN cd /py-solc-x && python3 ./setup.py install
-RUN cd /
+# RUN git clone https://github.com/iamdefinitelyahuman/py-solc-x.git /py-solc-x
+# RUN cd /py-solc-x && python3 ./setup.py install
+# RUN cd /
 
-RUN echo 'alias ll="ls -alsh"' >> /root/.profile
+# RUN echo 'alias ll="ls -alsh"' >> /root/.profile
 
 # copy the salas python code (the ethereum_data is not copied cause it is in the .dockerignore file)
 ADD ./miner/ /salas/miner/
 # copy the configuration (the ethereum_data is not copied cause it is in the .dockerignore file)
 ADD ./conf/ /salas/conf/
 ADD ./salas_contract/ /salas/salas_contract/
+ADD ./faucet/ /salas/faucet
 
 # for websocket
 #EXPOSE 8545 8546 31313 31313/udp

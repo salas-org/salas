@@ -1,0 +1,25 @@
+body {
+    color: white;
+    text-align: center;
+}
+
+input {
+    width: 80%;
+}
+
+button {
+    color: #55aa55;
+}
+
+.container {
+    width: 90%;
+    height: 40%;
+    padding: 20px;
+    margin: 0 auto;
+    border-radius: 12px;
+    background-color: #88aa77;
+}
+
+.flashes {
+    color: #113311;
+}

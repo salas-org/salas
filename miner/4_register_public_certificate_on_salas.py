@@ -19,14 +19,12 @@ config.read('./secrets/secret.ini')
 try:
     PIN=config.get('eid', 'PIN')
     ID_CHAIN=config.get('eid', 'ID_CHAIN')
-    PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE=config.get('eid', 'PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE')
 except configparser.NoSectionError as err:
     # probably the secret.ini file does not exist 
     # let's try the env
     import os
     PIN=os.environ['PIN']
     ID_CHAIN=os.environ['ID_CHAIN']
-    PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE=os.environ['PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE']
 
 with open('./secrets/password.txt') as f:
     account_password = f.read()
@@ -86,8 +84,43 @@ def get_latest_event_from_address_to_contract(topic_from_address, w3=w3_provider
     # event_decoded.blockNumber
     return event_decoded
 
-def main():
+def retrieve_public_certificate():
+    # get the user certificate for this key id on the card
+    # TODO: check that it is a authentication (and not a signing key)
+    # TODO: check that the chain id is correct for the certificate
+
+    user_cert = ''
+
+    if not(os.path.isfile('./cert.pem')):
+        with open('./cert.pem', "w") as f:
+            print(f"retrieving use certificate and converting to pem format")
+            # pkcs11-tool --pin 1234 --read-object --id 02 --type cert --output-file cert.der
+            print(f"storing user certificate")  
+            signing_process_1 = subprocess.run(["pkcs11-tool", f"-p{PIN}", f"-d{SIGN_KEY}", 
+                                                "--read-object", "--id", f"{SIGN_KEY}"], 
+                                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            # pipe the DER certificate in openssl to convert it to pem
+            # openssl x509 -inform DER  -outform PEM
+            signing_process_2 = subprocess.run(["openssl", "x509", 
+                                                "-inform", "DER", "-outform", "PEM", ">"], 
+                                                input=signing_process_1.stdout, 
+                                                stdout=f, stderr=subprocess.PIPE)
+
+            print(f"retrieved hex output")
+            if signing_process_2.returncode == 0 :
+                print(f"user certificate stored in file cert.pem")                                    
+            else:
+                print(f'user certificate could not be found, and could not be retrieved from smart card')
+                raise ValueError
     
+    # lets read the certificate
+    with open("./cert.pem") as f:
+            user_cert = f.read()
+    return user_cert
+
+def main():
+
     # get web3.py instance, and unlock the default account
     try:
         w3 = w3_provider()
@@ -112,9 +145,23 @@ def main():
     cost_in_wei = salas_contract.functions.getCost().call()
     print(cost_in_wei)
 
+    ###################
+    # sanity checks
+    ###################
     latest_event = get_latest_event_from_address_to_contract(miner_address[2:])
     if len(latest_event) != 0:
         print("assuming this address is already registered")
+        exit(0)
+
+    # do we already have an certificate file?
+    print("retrieving user certificate")
+    user_pem_cert = retrieve_public_certificate().splitlines(keeplinebreaks=False)
+    user_pem_cert_inner = "".join(user_pem_cert[1:-1])
+    print("user certificate loaded")
+
+    if w3.eth.get_balance(miner_address) < SALAS_CONTRACT_COST:
+        print("the account's balance is insufficient to cover registration costs")
+        print("use the faucet to request some salas in order to cover the transaction fees")
         exit(0)
 
     # calculate the signature of the address of the client/miner
@@ -137,7 +184,7 @@ def main():
 
     # call a transactions / change the state on the blockchain
     tx_hash = salas_contract.functions.registerAddress(ID_CHAIN
-                                    , PART_BETWEEN_BEGIN_AND_END_CERTIFICATE_OF_PUBLIC_KEY_CERTIFICATE
+                                    , user_pem_cert_inner
                                     , signed_address).transact({
                                         'from': miner_address,
                                         'to': SALAS_CONTRACT_ADDRESS,

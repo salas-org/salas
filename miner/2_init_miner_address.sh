@@ -17,10 +17,10 @@ else
     echo "saved password in $PASSWORD_FILE_PATH"
 fi
 
-if [ $INIT_MINER == "yes" ]; then
-    echo "initializing miner data... hope you know what you're doing..."
+if [ $INIT_MINER_ADDRESS == "yes" ]; then
+    echo "initializing miner address... hope you know what you're doing..."
 else
-    echo "skipping miner init (since INIT_MINER in .env.cmds is not yes)"
+    echo "skipping miner address init (since INIT_MINER_ADDRESS in .env.cmds is not yes)"
     exit 0
 fi
 
@@ -29,6 +29,3 @@ address=$(echo "$output" | grep -i 'public address of the key' | tr -s ' ' | cut
 echo "Public miner address is $address"
 mkdir -p "$LOCAL_SALAS_CONF_PATH" || true
 echo -n "$address" > "$LOCAL_SALAS_CONF_PATH/node_address.txt"
-
-# init the miner with the genesis file
-$SALAS_DIR/cmd/geth --keystore $MINER_KEYSTORE_PATH --datadir $LOCAL_ETH_DATA_PATH init $SALAS_GLOBAL_CONF_PATH/genesis.json

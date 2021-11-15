@@ -19,8 +19,9 @@ mkdir $MINER_ETH_DATA_PATH
 echo "NOT removing the keystore at $MINER_KEYSTORE_PATH, you need to do this manually if needed"
 
 # cleanup the miner
-mkdir -p $MINER_SALAS_CONF_PATH || true
-echo -n "0x0" > $MINER_SALAS_CONF_PATH/node_address.txt
-echo -n "0" > $MINER_SALAS_CONF_PATH/miner_address_registered.txt
+echo "NOT removing the conf (node_address and whether it is registered), you need to do this manually if needed"
+# mkdir -p $MINER_SALAS_CONF_PATH || true
+# echo -n "0x0" > $MINER_SALAS_CONF_PATH/node_address.txt
+# echo -n "0" > $MINER_SALAS_CONF_PATH/miner_address_registered.txt
 
 exit 0

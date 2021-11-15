@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SALAS Faucet</title>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">    
+    </head>
+    <body>
+        <div class="container">
+            <h1>SALAS Faucet</h1>
+            <br/><br/>
+            <h3>Insert the public address of your wallet</h3>
+            <form action="{{ url_for('send') }}" method="post">
+                <input type="text" id="address" name="address" placeholder="example: 0x5abADa0Ef67C97D975797F34715f06D0f9c07F5a"><br><br>
+                <button>Receive SALAS</button>
+            </form>
+            <br/><br/><br/>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                    <h3>{{ message }}</h3>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </body>
+</html>

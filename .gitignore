@@ -12,6 +12,7 @@ vol_*
 vol_keystore
 vol_conf
 vol_data
+vol_faucet_session
 secret.ini
 .env.secrets
 *secret*
