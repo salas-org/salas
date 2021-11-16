@@ -62,10 +62,10 @@ ADD ./miner/ /salas/miner/
 ADD ./conf/ /salas/conf/
 ADD ./salas_contract/ /salas/salas_contract/
 ADD ./faucet/ /salas/faucet
+ADD ./salas_verifier/ /salas/salas_verifier/
 
-# for websocket
-#EXPOSE 8545 8546 31313 31313/udp
-# no websocket
+# metamask on 8545, no websocket on 8546, 31313 is for salas itself
+# todo: need ethstat server to
 EXPOSE 8545 31313 31313/udp
 
 ENTRYPOINT ["/bin/bash"]

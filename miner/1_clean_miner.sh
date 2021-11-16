@@ -3,10 +3,10 @@ MINER_ETH_DATA_PATH=$(pwd)/ethereum_data
 MINER_SALAS_CONF_PATH=$(pwd)/conf
 MINER_KEYSTORE_PATH=$(pwd)/keystore
 
-if [ $CLEAN_MINER == "yes" ]; then
+if [ $NODE_CLEAN_DATA == "yes" ]; then
     echo "cleaning all miner data... hope you know what you're doing..."
 else
-    echo "skipping miner cleaning (since CLEAN_MINER in .env.cmds is not yes)"
+    echo "skipping miner cleaning (since NODE_CLEAN_DATA in .env.cmds is not yes)"
     exit 0
 fi
 

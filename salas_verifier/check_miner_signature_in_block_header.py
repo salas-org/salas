@@ -29,6 +29,7 @@ NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO = config.getint('key block', 'NR_BLOCKS_TO_G
 CONTRACT_DEPLOYED = PATH_ + '/conf/contract_deployed.txt'
 CONTRACT_PATH= PATH_ + '/salas_contract.sol'
 SLACK_ON_OFFSET_FOR_KEYBLOCK = 4
+VERIFY_ID_FROM_BLOCK_NR = 100
 
 with open(CONTRACT_DEPLOYED) as f:
     contract_deployed = f.read()
@@ -113,7 +114,7 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
 
     # test to see if we already have a salas contract
     # if not than just return okay
-    if contract_deployed != '1' or mined_block_nr<=130:
+    if contract_deployed != '1' or mined_block_nr<VERIFY_ID_FROM_BLOCK_NR:
         print("contract not yet deployed? or header block nr small")
         return 0
 

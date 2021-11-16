@@ -17,10 +17,10 @@ else
     echo "saved password in $PASSWORD_FILE_PATH"
 fi
 
-if [ $INIT_MINER_GENESIS == "yes" ]; then
+if [ $NODE_INIT_GENESIS == "yes" ]; then
     echo "initializing miner with genesis file ... hope you know what you're doing..."
 else
-    echo "skipping miner genesis init (since INIT_MINER_GENESIS in .env.cmds is not yes)"
+    echo "skipping miner genesis init (since NODE_INIT_GENESIS in .env.cmds is not yes)"
     exit 0
 fi
 

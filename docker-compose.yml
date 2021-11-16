@@ -16,16 +16,26 @@ services:
       - ./vol_faucet_session:/salas/faucet/session
     command: >
       "(pcscd) 
+      && (echo '********* CLEANING AND INITIALIZATION STEPS (starts in 5 secs) ********')
+      && (sleep 1)
       && (cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner_address.sh && ./2_init_miner_genesis.sh)
+      && (echo '********* STARTING NODE (starts in 5 secs) ********')
+      && (sleep 1)
       && (cd /salas/miner/ && ./3_start_miner.sh &) 
-      && (sleep 5)
+      && (echo '********* STARTING FAUCET IF REQUESTED (starts in 5 secs) ********')
+      && (sleep 1)
       && (cd /salas/faucet/ && python3 ./4_serve_faucet.py &)
-      && (sleep 5)
-      && (cd /salas/miner/ && python3 ./5_start_salas_mining.py)"
+      && (echo '********* STARTING MINING WITH EID (starts in 5 secs) ********')
+      && (sleep 1)
+      && (cd /salas/miner/ && python3 ./5_start_salas_mining.py &)
+      && (echo '********* CONTRACT DEPLOYMENT IF REQUESTED (starts in 5 secs) ********')
+      && (sleep 1)
+      && (cd /salas/salas_contract/ && python3 ./1_compile_and_deploy_salas_contract.py)
+      && (sleep infinity)"
     env_file:
-      - .env.cmds
+      - .env.user
       - .env.secrets
       - .env
     stdin_open: true
     tty: true      
-    privileged: true # needed for the smartcard, but a little to insecure maybe (better per device)
+    privileged: true # needed for the smartcard, but insecure (better use devices)

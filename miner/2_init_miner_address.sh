@@ -17,10 +17,10 @@ else
     echo "saved password in $PASSWORD_FILE_PATH"
 fi
 
-if [ $INIT_MINER_ADDRESS == "yes" ]; then
+if [ $NODE_INIT_ADDRESS == "yes" ]; then
     echo "initializing miner address... hope you know what you're doing..."
 else
-    echo "skipping miner address init (since INIT_MINER_ADDRESS in .env.cmds is not yes)"
+    echo "skipping miner address init (since NODE_INIT_ADDRESS in .env.cmds is not yes)"
     exit 0
 fi
 

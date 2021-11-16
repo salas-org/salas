@@ -65,7 +65,7 @@ def send():
         else:
             fl.flash("An error was encountered. Please check your address and retry.")
     else:
-        fl.flash(f"You have already receive SALAS today. You will be able to receive an new faucet drop in {FAUCET_TIMEOUT_IN_SECS - (timestamp - map_address_time[address])} seconds")
+        fl.flash(f"You have already received SALAS today. You will be able to receive an new faucet drop in {FAUCET_TIMEOUT_IN_SECS - (timestamp - map_address_time[address])} seconds")
     return fl.redirect(fl.url_for("index"))
 
 def storeTxnInMap(address: str, timestamp: int):

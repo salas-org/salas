@@ -24,7 +24,7 @@ contract Salas {
     // Constructor
     constructor() {
         _owner = msg.sender;
-        _cost_in_wei = 2_000_000;  //TODO: add some appropriate cost: should cost too much to DOS, should be little so everyone can pay it 
+        _cost_in_wei = 30_000_000_000_000_000;  //some appropriate cost: should cost too much to DOS, should be little so everyone can pay it via faucet 
     }
 
     // Modifier

@@ -17,6 +17,8 @@ You can probably get it to run on macos based on the dockerfile and on the instr
 + For subsequent runs of your miner container, please use `docker-compose stop` and `docker-compose restart salas_miner`. You can check the state of your container with `docker-compose ps` or `docker ps -a`.
 + IMPORTANT: your personal keystore file can be found in the ./vol_keystore directory on the host. Copy this to a save place.
 
+You can make a faucet if you want by setting START_FAUCET to yes in .env  
+
 ### Native on Linux
 
 Execute the following commands on a standard ubuntu. First let's install the dependencies, then salas itself.
