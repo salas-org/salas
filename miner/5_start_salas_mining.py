@@ -21,6 +21,10 @@ SIGN_METHOD=config.get('beid', 'SIGN_METHOD')
 SECONDS_TO_SLEEP=config.getint('main', 'SECONDS_TO_SLEEP')
 OFFSET=config.getint('main', 'OFFSET')
 
+if os.environ['MINER_START_EID'] != 'yes':
+    print("Not starting mining. Check the env.user file.")
+    os.exit(0)
+
 config.read('./secrets/secret.ini')
 try:
     PIN=config.get('eid', 'PIN')
