@@ -1,3 +1,4 @@
+import os, sys
 from logging import exception
 from web3 import Web3
 from pprint import pprint
@@ -23,7 +24,7 @@ OFFSET=config.getint('main', 'OFFSET')
 
 if os.environ['MINER_START_EID'] != 'yes':
     print("Not starting mining. Check the env.user file.")
-    os.exit(0)
+    sys.exit(0)
 
 config.read('./secrets/secret.ini')
 try:

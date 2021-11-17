@@ -5,14 +5,20 @@
 
 ## Install
 
-The easiest solution to run a salas miner is to run a docker container. This won't work on macos
-since the needed hypervisor on mac does not allow usb passthrough (needed for smartcard readers).
-You can probably get it to run on macos based on the dockerfile and on the instructions below.
+The easiest solution to run a salas miner is to run a docker container. This won't work on macos since the needed hypervisor on mac does not allow usb passthrough (needed for smartcard readers). You can probably get it to run on macos based on the dockerfile and on the instructions below.
+
+### Run a docker image with compose (easiest way)
++ make sure you have docker install. Follow the instruction on https://docs.docker.com/get-docker/ for your operating system if you need to install it.
++ make sure you have a working version of docker-compose https://docs.docker.com/compose/install/ .
++ make sure git is installed. More info on https://git-scm.com/ 
++ in a terminal type `git clone https://github.com/salas-org/salas.git`
++ cd in the salas directory with `cd salas`
++ type `docker-compose up`
+
 
 ### Dockerfile
-
 + make a file with your secrets `cp .tmp.env.secrets .env.secrets` , and fill in the values for PIN and ID_CHAIN in the .env.secrets file. Tip: Do not use a space key around the equal sign.
-+ `docker-compose build`
++ `docker-compose build` # this will take at least several coffees of time as it compiles the solidity compiler.
 + `docker-compose run` # this will start a container with your miner code`
 + For subsequent runs of your miner container, please use `docker-compose stop` and `docker-compose restart salas_miner`. You can check the state of your container with `docker-compose ps` or `docker ps -a`.
 + IMPORTANT: your personal keystore file can be found in the ./vol_keystore directory on the host. Copy this to a save place.

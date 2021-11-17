@@ -65,7 +65,7 @@ ADD ./faucet/ /salas/faucet
 ADD ./salas_verifier/ /salas/salas_verifier/
 
 # metamask on 8545, no websocket on 8546, 31313 is for salas itself
-# todo: need ethstat server to
-EXPOSE 8545 31313 31313/udp
+# faucet on 8080 
+EXPOSE 8545 31313 31313/udp 8080
 
 ENTRYPOINT ["/bin/bash"]

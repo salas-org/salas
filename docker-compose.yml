@@ -1,13 +1,11 @@
 version: "2"
 services:
   salas_miner:
-    build: 
-      context: .
-      args:
-        gethrepo: $GETH_REPO
+    image: "paularmand/salas:v1"
     ports:
       - "8545:8545"
       - "31313:31313"
+      - "8080:8080"
     entrypoint: /bin/bash -c
     volumes:
       - ./vol_keystore:/salas/miner/keystore
