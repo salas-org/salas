@@ -21,7 +21,8 @@ RUN patch --forward /go-ethereum/params/protocol_params.go < /go-ethereum/protoc
 # LC_ALL=C set to C for utf-8 and ascii problems in sed (where gsed ignores these bytesequences)
 RUN echo "replacing all occurences of default port number 30303 with 31313"
 
-RUN for afile in $(grep --exclude "*.bak" -Rl 30303 /go-ethereum); do echo "found in file $afile, replacing with 31313"; sed -i.bak "s/30303/31313/g" $afile; rm $afile.bak || true; done
+RUN for afile in $(grep -Rl 30303 /go-ethereum); do echo "found in file $afile, replacing with 31313"; sed -i.bak "s/30303/31313/g" $afile; rm $afile.bak || true; done
+#RUN for afile in $(grep --exclude "*.bak" -Rl 30303 /go-ethereum); do echo "found in file $afile, replacing with 31313"; sed -i.bak "s/30303/31313/g" $afile; rm $afile.bak || true; done
 
 RUN cd /go-ethereum && make geth
 
@@ -57,6 +58,9 @@ RUN pip install pyopenssl
 # RUN cd /
 
 # RUN echo 'alias ll="ls -alsh"' >> /root/.profile
+
+RUN apk add curl
+
 
 # copy the salas python code (the ethereum_data is not copied cause it is in the .dockerignore file)
 ADD ./miner/ /salas/miner/
