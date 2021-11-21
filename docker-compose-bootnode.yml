@@ -10,7 +10,7 @@ services:
       - NODE_CLEAN_DATA=no
       - NODE_INIT_ADDRESS=no
       - NODE_INIT_GENESIS=no
-      - FAUCET_START_SERVER=yes
+      - FAUCET_START_SERVER=no
       - FAUCET_SALAS_PER_DROP=0.1
       - FAUCET_TIMEOUT_IN_SECS=86400
       - MINER_START_EID=no
