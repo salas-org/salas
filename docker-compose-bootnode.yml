@@ -1,11 +1,11 @@
 version: "2"
 services:
   miner:
-    # image: "paularmand/salas"
-    build: 
-      context: .
-      args:
-        gethrepo: $GETH_REPO
+    image: "paularmand/salas"
+    # build: 
+    #   context: .
+    #   args:
+    #     gethrepo: $GETH_REPO
     environment:
       - NODE_CLEAN_DATA=no
       - NODE_INIT_ADDRESS=no
