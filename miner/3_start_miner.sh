@@ -48,7 +48,7 @@ fi
 if [[ ${#SALAS_ENODES} -gt 8 ]] ; then
     BOOTNODES_PARAMS="--bootnodes $SALAS_ENODES"
 else
-    BOOTNODES_PARAMS=""
+    BOOTNODES_PARAMS="--nodiscover"
 fi
 
 
