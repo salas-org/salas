@@ -6,6 +6,7 @@ MINER_ETH_DATA_PATH=$(pwd)/ethereum_data
 MINER_KEYSTORE_PATH=$(pwd)/keystore
 MINER_SALAS_CONF_PATH=$(pwd)/conf
 MINER_IPC_PATH=$(pwd)/geth.ipc
+MINER_ETHASH_PATH=$(pwd)/ethash
 PASSWORD_FILE_PATH=$(pwd)/secrets/password.txt
 MINER_PORT=31313
 MINER_GASPRICE_IN_GWEI=1
@@ -43,9 +44,12 @@ if [[ $MINER_USE_3TH_PARTY_FOR_IP_ADDRESS == "yes" ]]; then
     EXTRA_PARAMS="$EXTRA_PARAMS --nat extip:$(curl https://ipinfo.io/ip)"
 fi 
 
-miner_cmd="$SALAS_DIR/cmd/geth --ipcpath $MINER_IPC_PATH --keystore $MINER_KEYSTORE_PATH --bootnodes $SALAS_ENODES --datadir $MINER_ETH_DATA_PATH --syncmode full --verbosity $VERBOSITY \
-  --port $MINER_PORT --networkid $NETWORKID --miner.gasprice $MINER_GASPRICE_IN_GWEI --miner.etherbase "${coinbase}" \
-  --unlock "${coinbase}" --password $PASSWORD_FILE_PATH --mine $EXTRA_PARAMS"
+miner_cmd="$SALAS_DIR/cmd/geth --ipcpath $MINER_IPC_PATH --keystore $MINER_KEYSTORE_PATH \
+  --bootnodes $SALAS_ENODES --datadir $MINER_ETH_DATA_PATH --syncmode full \
+  --verbosity $VERBOSITY --port $MINER_PORT --networkid $NETWORKID \
+  --miner.gasprice $MINER_GASPRICE_IN_GWEI --miner.etherbase ${coinbase} \
+  --unlock ${coinbase} --password $PASSWORD_FILE_PATH --mine $EXTRA_PARAMS \
+  --syncmode full --ethash.dagdir=$MINER_ETHASH_PATH --light.serve 30"
 
 echo $miner_cmd
 $($miner_cmd)

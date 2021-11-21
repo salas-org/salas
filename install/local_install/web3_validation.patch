@@ -1,0 +1,11 @@
+--- validation.py
++++ validation.py.new
+@@ -42,7 +42,7 @@
+ if TYPE_CHECKING:
+     from web3 import Web3  # noqa: F401
+ 
+-MAX_EXTRADATA_LENGTH = 32
++MAX_EXTRADATA_LENGTH = 352
+ 
+ is_not_null = complement(is_null)
+ 

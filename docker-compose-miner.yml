@@ -30,6 +30,7 @@ services:
       - ./vol_conf:/salas/miner/conf
       - ./vol_data:/salas/miner/ethereum_data
       - ./vol_faucet_session:/salas/faucet/session
+      - ./vol_eth_dags:/salas/ethash
     command: >
       "(pcscd) 
       && (echo '********* CLEANING AND INITIALIZATION STEPS (starts in 5 secs) ********')
