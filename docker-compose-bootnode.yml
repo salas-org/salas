@@ -1,15 +1,22 @@
 version: "2"
 services:
   salas_miner:
-    build: 
-      context: .
-      args:
-        gethrepo: $GETH_REPO
+    image: "paularmand/salas"
+    environment:
+      - NODE_CLEAN_DATA=no
+      - NODE_INIT_ADDRESS=no
+      - NODE_INIT_GENESIS=no
+      - FAUCET_START_SERVER=yes
+      - FAUCET_SALAS_PER_DROP=0.1
+      - FAUCET_TIMEOUT_IN_SECS=86400
+      - MINER_START_EID=no
+      - CONTRACT_COMPILE_AND_DEPLOY=no
+    env_file:
+      - .env.secrets
+      - .env      
     ports:
-      - "8545:8545"
       - "31313:31313/tcp"
       - "31313:31313/udp"
-      - "8080:8080"
     entrypoint: /bin/bash -c
     volumes:
       - ./vol_keystore:/salas/miner/keystore
@@ -34,10 +41,6 @@ services:
       && (sleep 1)
       && (cd /salas/salas_contract/ && python3 ./1_compile_and_deploy_salas_contract.py)
       && (sleep infinity)"
-    env_file:
-      - .env.user
-      - .env.secrets
-      - .env
     stdin_open: true
     tty: true      
-    privileged: true # needed for the smartcard, but insecure (better use devices)
+    privileged: false # true if you need a smartcard, but insecure (better use devices)

@@ -38,7 +38,7 @@ echo "coinbase is $coinbase"
 echo "*******"
 echo 'starting a miner with this command: (should NOT yet start mining)'
 
-miner_cmd="$SALAS_DIR/cmd/geth --ipcpath $MINER_IPC_PATH --keystore $MINER_KEYSTORE_PATH --bootnodes $SALAS_ENODES --nat none --datadir $MINER_ETH_DATA_PATH --syncmode full --verbosity $VERBOSITY \
+miner_cmd="$SALAS_DIR/cmd/geth --ipcpath $MINER_IPC_PATH --keystore $MINER_KEYSTORE_PATH --bootnodes $SALAS_ENODES --datadir $MINER_ETH_DATA_PATH --syncmode full --verbosity $VERBOSITY \
   --port $MINER_PORT --networkid $NETWORKID --miner.gasprice $MINER_GASPRICE_IN_GWEI --miner.etherbase "${coinbase}" \
   --unlock "${coinbase}" --password $PASSWORD_FILE_PATH --mine"
 

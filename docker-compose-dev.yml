@@ -7,9 +7,7 @@ services:
         gethrepo: $GETH_REPO
     ports:
       - "8545:8545"
-      - "31313:31313/tcp"
-      - "31313:31313/udp"
-      - "8080:8080"
+      - "31313:31313"
     entrypoint: /bin/bash -c
     volumes:
       - ./vol_keystore:/salas/miner/keystore

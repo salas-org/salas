@@ -45,10 +45,12 @@ RUN apk add gcc libc-dev
 RUN pip install --upgrade pip setuptools
 RUN pip install web3 
 RUN apk add git opensc ccid pcsc-lite-libs openssl
+RUN apk add --no-cache libressl-dev musl-dev libffi-dev
 
 RUN pip install py-solc-x
 RUN python3 -c "import solcx; solcx.compile_solc('0.8.9')"
 RUN pip install flask
+RUN pip install pyopenssl
 
 # RUN git clone https://github.com/iamdefinitelyahuman/py-solc-x.git /py-solc-x
 # RUN cd /py-solc-x && python3 ./setup.py install
@@ -63,7 +65,7 @@ ADD ./conf/ /salas/conf/
 ADD ./salas_contract/ /salas/salas_contract/
 ADD ./faucet/ /salas/faucet
 ADD ./salas_verifier/ /salas/salas_verifier/
-
+RUN ln -s /salas/salas_verifier/ ./salas/miner/salas_verifier
 # metamask on 8545, no websocket on 8546, 31313 is for salas itself
 # faucet on 8080 
 EXPOSE 8545 31313 31313/udp 8080
