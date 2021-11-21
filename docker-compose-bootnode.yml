@@ -17,6 +17,7 @@ services:
       - CONTRACT_COMPILE_AND_DEPLOY=no
       - MINER_USE_3TH_PARTY_FOR_IP_ADDRESS=yes
       - VERBOSITY=4
+      - SALAS_ENODES=none
     env_file:
       - .env.secrets
       - .env      

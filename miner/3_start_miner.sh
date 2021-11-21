@@ -42,14 +42,23 @@ echo 'starting a miner with this command: (should NOT yet start mining)'
 EXTRA_PARAMS=""
 if [[ $MINER_USE_3TH_PARTY_FOR_IP_ADDRESS == "yes" ]]; then
     EXTRA_PARAMS="$EXTRA_PARAMS --nat extip:$(curl https://ipinfo.io/ip)"
-fi 
+fi
+
+# If the enodes parameter is longer than x chars, use it as bootnodes, else disregard it
+if [[ ${#SALAS_ENODES} -gt 8 ]] ; then
+    BOOTNODES_PARAMS="--bootnodes $SALAS_ENODES"
+else
+    BOOTNODES_PARAMS=""
+fi
+
 
 miner_cmd="$SALAS_DIR/cmd/geth --ipcpath $MINER_IPC_PATH --keystore $MINER_KEYSTORE_PATH \
-  --bootnodes $SALAS_ENODES --datadir $MINER_ETH_DATA_PATH --syncmode full \
+  --datadir $MINER_ETH_DATA_PATH --syncmode full \
   --verbosity $VERBOSITY --port $MINER_PORT --networkid $NETWORKID \
   --miner.gasprice $MINER_GASPRICE_IN_GWEI --miner.etherbase ${coinbase} \
   --unlock ${coinbase} --password $PASSWORD_FILE_PATH --mine $EXTRA_PARAMS \
-  --syncmode full --ethash.dagdir=$MINER_ETHASH_PATH --light.serve 30"
+  --syncmode full --ethash.dagdir=$MINER_ETHASH_PATH --light.serve 30 \
+  $BOOTNODES_PARAMS"
 
 echo $miner_cmd
 $($miner_cmd)
