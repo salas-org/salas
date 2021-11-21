@@ -1,0 +1,51 @@
+version: "2"
+services:
+  miner:
+    image: "paularmand/salas"
+    # build: 
+    #   context: .
+    #   args:
+    #     gethrepo: $GETH_REPO
+    environment:
+      - NODE_CLEAN_DATA=yes
+      - NODE_INIT_ADDRESS=yes
+      - NODE_INIT_GENESIS=yes
+      - FAUCET_START_SERVER=no
+      - FAUCET_SALAS_PER_DROP=0.1
+      - FAUCET_TIMEOUT_IN_SECS=86400
+      - MINER_START_EID=yes
+      - CONTRACT_COMPILE_AND_DEPLOY=no
+    env_file:
+      - .env.secrets
+      - .env      
+    ports:
+      - "31313:31313/tcp"
+      - "31313:31313/udp"
+      - "8545:8545"
+    entrypoint: /bin/bash -c
+    volumes:
+      - ./vol_keystore:/salas/miner/keystore
+      - ./vol_conf:/salas/miner/conf
+      - ./vol_data:/salas/miner/ethereum_data
+      - ./vol_faucet_session:/salas/faucet/session
+    command: >
+      "(pcscd) 
+      && (echo '********* CLEANING AND INITIALIZATION STEPS (starts in 5 secs) ********')
+      && (sleep 1)
+      && (cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner_address.sh && ./2_init_miner_genesis.sh)
+      && (echo '********* STARTING NODE (starts in 5 secs) ********')
+      && (sleep 1)
+      && (cd /salas/miner/ && ./3_start_miner.sh &) 
+      && (echo '********* STARTING FAUCET IF REQUESTED (starts in 5 secs) ********')
+      && (sleep 1)
+      && (cd /salas/faucet/ && python3 ./4_serve_faucet.py &)
+      && (echo '********* STARTING MINING WITH EID (starts in 5 secs) ********')
+      && (sleep 1)
+      && (cd /salas/miner/ && python3 ./5_start_salas_mining.py &)
+      && (echo '********* CONTRACT DEPLOYMENT IF REQUESTED (starts in 5 secs) ********')
+      && (sleep 1)
+      && (cd /salas/salas_contract/ && python3 ./1_compile_and_deploy_salas_contract.py)
+      && (sleep infinity)"
+    stdin_open: true
+    tty: true      
+    privileged: true # true if you need a smartcard, but insecure (better use devices)
