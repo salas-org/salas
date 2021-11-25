@@ -192,6 +192,8 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
     # Check whether the mined block extradata is the key block hash that is signed by the same private key
     ###################
 
+    # first remove the prefix
+    signed_key_block_hash = signed_key_block_hash[8:]
     signed_key_block_hash_base64 = signed_key_block_hash.encode('ascii')
     signed_key_block_hash_bytes = base64.b64decode(signed_key_block_hash_base64)
 
