@@ -62,8 +62,10 @@ RUN pip install pyopenssl
 RUN apk add curl
 
 # patche web3.py validation code for the extradata
-COPY ./install/local_install/web3_validation.patch /salas/patch/validation.patch
-RUN patch --forward /usr/local/lib/python3.9/site-packages/web3/middleware/validation.py < /salas/patch/validation.patch 
+COPY ./install/local_install/web3_validation.patch /salas/patch/web3_validation.patch
+COPY ./install/local_install/web3_method_formatters.patch /salas/patch/web3_formatters.patch
+RUN patch --forward /usr/local/lib/python3.9/site-packages/web3/middleware/validation.py < /salas/patch/web3_validation.patch 
+RUN patch --forward /usr/local/lib/python3.9/site-packages/web3/_utils/method_formatters.py < /salas/patch/web3_formatters.patch 
 
 # copy the salas python code (the ethereum_data is not copied cause it is in the .dockerignore file)
 ADD ./miner/ /salas/miner/

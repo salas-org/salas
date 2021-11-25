@@ -16,8 +16,9 @@ services:
       - MINER_START_EID=yes
       - CONTRACT_COMPILE_AND_DEPLOY=no
       - MINER_USE_3TH_PARTY_FOR_IP_ADDRESS=yes
-      - VERBOSITY=4
-      - SALAS_ENODES=enode://41561e4a3cd2ff2028b274f7458259895382baa42ff56fcbcb9de690f647758d17e9e9c80eff7d6d444e547e6ab63fed2ab18ade64d092f3371ce1b5927df9b1@51.159.184.213:31313
+      - VERBOSITY=3
+      - RPC_OPTIONS=--http --http.port 8545 --http.addr 0.0.0.0 --http.vhosts '*' --http.corsdomain 'chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn' --http.api eth,net,web3,personal --allow-insecure-unlock
+      - SALAS_ENODES=enode://3261ba3255b281c80f36df570935f2dc4e5b5996e7bb98b41187e946a24d4641c70ad8b6c04d54642019b64eb727ffc83bf79057cd96dd8641b000bf285cbecd@51.159.184.213:31313
     env_file:
       - .env.secrets
       - .env      
@@ -40,9 +41,9 @@ services:
       && (echo '********* STARTING NODE (starts in 5 secs) ********')
       && (sleep 1)
       && (cd /salas/miner/ && ./3_start_miner.sh &) 
-      && (echo '********* STARTING FAUCET IF REQUESTED (starts in 5 secs) ********')
+      && (echo '********* REGISTERING EID IF REQUESTED (starts in 5 secs) ********')
       && (sleep 1)
-      && (cd /salas/faucet/ && python3 ./4_serve_faucet.py &)
+      && (cd /salas/miner/ && python3 ./4_register_public_certificate_on_salas.py &)
       && (echo '********* STARTING MINING WITH EID (starts in 5 secs) ********')
       && (sleep 1)
       && (cd /salas/miner/ && python3 ./5_start_salas_mining.py &)

@@ -51,14 +51,14 @@ else
     BOOTNODES_PARAMS="--nodiscover"
 fi
 
-
 miner_cmd="$SALAS_DIR/cmd/geth --ipcpath $MINER_IPC_PATH --keystore $MINER_KEYSTORE_PATH \
   --datadir $MINER_ETH_DATA_PATH --syncmode full \
   --verbosity $VERBOSITY --port $MINER_PORT --networkid $NETWORKID \
   --miner.gasprice $MINER_GASPRICE_IN_GWEI --miner.etherbase ${coinbase} \
   --unlock ${coinbase} --password $PASSWORD_FILE_PATH --mine $EXTRA_PARAMS \
   --syncmode full --ethash.dagdir=$MINER_ETHASH_PATH --light.serve 30 \
-  $BOOTNODES_PARAMS"
+  $BOOTNODES_PARAMS -pcscdpath /dev/null \
+  $RPC_OPTIONS"
 
 echo $miner_cmd
 $($miner_cmd)

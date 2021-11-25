@@ -26,13 +26,9 @@ SALAS_CONTRACT_ADDRESS=config.get('main', 'SALAS_CONTRACT_ADDRESS')
 NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM = config.getint('key block', 'NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM')  # should never sign a block less that x blocks ago
 NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO = config.getint('key block', 'NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO') # only consider the most recent block which is a multiple of this value (and which is not more recent than NR_BLOCKS_TO_GO_BACK_TO_SIGN_MINIMUM)
 
-CONTRACT_DEPLOYED = PATH_ + '/conf/contract_deployed.txt'
 CONTRACT_PATH= PATH_ + '/salas_contract.sol'
 SLACK_ON_OFFSET_FOR_KEYBLOCK = 4
-VERIFY_ID_FROM_BLOCK_NR = 100
-
-with open(CONTRACT_DEPLOYED) as f:
-    contract_deployed = f.read()
+VERIFY_ID_FROM_BLOCK_NR = 250
 
 # Instantiate the parser
 parser = argparse.ArgumentParser(description='Python program to check if the miner is okay')
@@ -114,8 +110,8 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
 
     # test to see if we already have a salas contract
     # if not than just return okay
-    if contract_deployed != '1' or mined_block_nr<VERIFY_ID_FROM_BLOCK_NR:
-        print("contract not yet deployed? or header block nr small")
+    if mined_block_nr < VERIFY_ID_FROM_BLOCK_NR:
+        print("header block nr very small so skipping verification")
         return 0
 
     # get the events from the transaction from the etherbase to the salas contract address
@@ -177,20 +173,20 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
 
     # removed this check. Otherwise difficult to start mining on the chain, catch 22 (no salas, no mining... no salas earned...)
 
-    # hex_signature = event_decoded.args.signed_address
-    # bytes_signature = bytes.fromhex(hex_signature)
+    hex_signature = event_decoded.args.signed_address
+    bytes_signature = bytes.fromhex(hex_signature)
 
-    # try:
-    #     OpenSSL.crypto.verify(parsed_cert
-    #         , bytes_signature
-    #         , '0x' + other_miner_etherbase, 
-    #         'sha1')
+    try:
+        OpenSSL.crypto.verify(parsed_cert
+            , bytes_signature
+            , '0x' + other_miner_etherbase, 
+            'sha1')
 
-    # except Exception as err:
-    #     print('Could not verify the signature of the keccak256_address with the linked public key')
-    #     raise err
+    except Exception as err:
+        print('Could not verify the signature of the keccak256_address with the linked public key')
+        raise err
 
-    # print(f"private key used to sign the address corresponds to the public key in the certificate")
+    print(f"private key used to sign the address corresponds to the public key in the certificate")
 
     ###################
     # Check whether the mined block extradata is the key block hash that is signed by the same private key

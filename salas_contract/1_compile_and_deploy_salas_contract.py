@@ -33,7 +33,6 @@ try:
     _account = miner_address
     w3.eth.default_account = _account
     print(f"account; {_account}")
-    print(f"password ; {password}")
     w3.geth.personal.unlock_account(_account, password, 600)
     print(f'current balance on default address ({_account}) is {w3.eth.get_balance(_account)}')
 except FileNotFoundError as err:

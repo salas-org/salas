@@ -1,0 +1,11 @@
+--- method_formatters.py
++++ method_formatters.py.new
+@@ -210,7 +210,7 @@
+ 
+ BLOCK_FORMATTERS = {
+     'baseFeePerGas': to_integer_if_hex,
+-    'extraData': to_hexbytes(32, variable_length=True),
++    'extraData': to_hexbytes(352, variable_length=True),
+     'gasLimit': to_integer_if_hex,
+     'gasUsed': to_integer_if_hex,
+     'size': to_integer_if_hex,

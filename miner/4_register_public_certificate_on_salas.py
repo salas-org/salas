@@ -43,8 +43,6 @@ def get_latest_event_from_address_to_contract(topic_from_address, w3=w3_provider
     w3 = w3_provider()
 
     # get the contract, bytecode and ABI
-    with open(CONTRACT_PATH) as f:
-        solidity_code = f.read()
     compiled_sol = compile_source(solidity_code)
     contract_id, contract_interface = compiled_sol.popitem()
     abi = contract_interface['abi']
@@ -97,7 +95,7 @@ def retrieve_public_certificate():
             # pkcs11-tool --pin 1234 --read-object --id 02 --type cert --output-file cert.der
             print(f"storing user certificate")  
             signing_process_1 = subprocess.run(["pkcs11-tool", f"-p{PIN}", f"-d{SIGN_KEY}", 
-                                                "--read-object", "--id", f"{SIGN_KEY}"], 
+                                                "--read-object", "--type", "cert", "--id", f"{SIGN_KEY}"], 
                                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             # pipe the DER certificate in openssl to convert it to pem
@@ -148,14 +146,16 @@ def main():
     ###################
     # sanity checks
     ###################
-    latest_event = get_latest_event_from_address_to_contract(miner_address[2:])
-    if len(latest_event) != 0:
-        print("assuming this address is already registered")
-        exit(0)
+    # latest_event = get_latest_event_from_address_to_contract(miner_address[2:])
+    # if len(latest_event) != 0:
+    #     print("assuming this address is already registered")
+    #     exit(0)
 
     # do we already have an certificate file?
     print("retrieving user certificate")
-    user_pem_cert = retrieve_public_certificate().splitlines(keeplinebreaks=False)
+    user_pem_cert = retrieve_public_certificate()
+    print(type(user_pem_cert))
+    user_pem_cert = user_pem_cert.splitlines()
     user_pem_cert_inner = "".join(user_pem_cert[1:-1])
     print("user certificate loaded")
 
@@ -188,7 +188,7 @@ def main():
                                     , signed_address).transact({
                                         'from': miner_address,
                                         'to': SALAS_CONTRACT_ADDRESS,
-                                        'value': SALAS_CONTRACT_COST
+                                        'value': int(SALAS_CONTRACT_COST)
                                     })
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
