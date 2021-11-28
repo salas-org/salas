@@ -70,7 +70,6 @@ RUN patch --forward /usr/local/lib/python3.9/site-packages/web3/_utils/method_fo
 # copy the salas python code (the ethereum_data is not copied cause it is in the .dockerignore file)
 ADD ./miner/ /salas/miner/
 # copy the configuration (the ethereum_data is not copied cause it is in the .dockerignore file)
-ADD ./conf/ /salas/conf/
 ADD ./salas_contract/ /salas/salas_contract/
 ADD ./faucet/ /salas/faucet
 ADD ./salas_verifier/ /salas/salas_verifier/

@@ -13,10 +13,6 @@ The easiest solution to run a salas miner is to run a docker container. This won
 + make sure git is installed. More info on https://git-scm.com/ 
 + in a terminal type `git clone https://github.com/salas-org/salas.git`
 + cd in the salas directory with `cd salas`
-+ type `docker-compose up`
-
-
-### Dockerfile
 + make a file with your secrets `cp .tmp.env.secrets .env.secrets` , and fill in the values for PIN and ID_CHAIN in the .env.secrets file. Tip: Do not use a space key around the equal sign.
 + `docker-compose build` # this will take at least several coffees of time as it compiles the solidity compiler.
 + `docker-compose run` # this will start a container with your miner code`
@@ -62,6 +58,9 @@ substitute your public ip of your node for 127.0.0.1 and leave of the discport p
 `enode://ab6583cb3b5c1248cbf0f7e9e377f2dd6c7fdebb6cb2e1e2d1659ce0621677d41c46f2fd9c354f42d62b76e00d085ed4209c575ee9858a90bf68fdba00f44af4@51.15.202.74:31313`
 This value can be added to the conf/global/salas.sh file to make your bootnode part of the salas network.
 Make sure you setup a firewall rule to allow incoming tcp traffic on port 31313 (default port for salas). 
+
+# List of ID CHAINS
+'02' is for the Belgian ID - Authentication Key
 
 # LIcense info
 ## Salas License

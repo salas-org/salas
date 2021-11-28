@@ -18,6 +18,7 @@ services:
       - MINER_USE_3TH_PARTY_FOR_IP_ADDRESS=yes
       - VERBOSITY=4
       - SALAS_ENODES=none
+      - RPC_OPTIONS=
     env_file:
       - .env.secrets
       - .env      
@@ -26,9 +27,10 @@ services:
       - "31313:31313/udp"
     entrypoint: /bin/bash -c
     volumes:
-      - ./vol_keystore:/salas/miner/keystore
-      - ./vol_conf:/salas/miner/conf
-      - ./vol_data:/salas/miner/ethereum_data
+      - ./vol_conf:/salas/conf
+      - ./vol_node_keystore:/salas/miner/keystore
+      - ./vol_node_conf:/salas/miner/conf
+      - ./vol_node_data:/salas/miner/ethereum_data
       - ./vol_faucet_session:/salas/faucet/session
     command: >
       "(pcscd) 

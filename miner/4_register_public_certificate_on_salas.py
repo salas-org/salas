@@ -94,7 +94,7 @@ def retrieve_public_certificate():
             print(f"retrieving use certificate and converting to pem format")
             # pkcs11-tool --pin 1234 --read-object --id 02 --type cert --output-file cert.der
             print(f"storing user certificate")  
-            signing_process_1 = subprocess.run(["pkcs11-tool", f"-p{PIN}", f"-d{SIGN_KEY}", 
+            signing_process_1 = subprocess.run(["pkcs11-tool", f"-p{PIN}", 
                                                 "--read-object", "--type", "cert", "--id", f"{SIGN_KEY}"], 
                                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -159,7 +159,7 @@ def main():
     user_pem_cert_inner = "".join(user_pem_cert[1:-1])
     print("user certificate loaded")
 
-    if w3.eth.get_balance(miner_address) < SALAS_CONTRACT_COST:
+    if w3.eth.get_balance(miner_address) < float(SALAS_CONTRACT_COST):
         print("the account's balance is insufficient to cover registration costs")
         print("use the faucet to request some salas in order to cover the transaction fees")
         exit(0)

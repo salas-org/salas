@@ -20,3 +20,4 @@ geth.ipc
 __pycache__/
 # exceptions (will not be ignored)
 !.tmp.env.secrets
+!vol_conf
