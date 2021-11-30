@@ -1,3 +1,4 @@
+import os, sys
 import configparser
 from web3 import Web3
 from solcx import compile_source
@@ -6,6 +7,10 @@ import pprint
 
 IPC_PATH = './geth.ipc'
 CONTRACT_PATH = '../salas_contract'
+
+if os.environ['MINER_REGISTER_ADDRESS'] != 'yes':
+    print("Skipping address registration.")
+    sys.exit(0)
 
 config = configparser.ConfigParser()
 config.read('../conf/global/salas.ini')
@@ -22,7 +27,6 @@ try:
 except configparser.NoSectionError as err:
     # probably the secret.ini file does not exist 
     # let's try the env
-    import os
     PIN=os.environ['PIN']
     ID_CHAIN=os.environ['ID_CHAIN']
 

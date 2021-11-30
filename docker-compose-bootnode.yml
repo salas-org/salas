@@ -6,34 +6,21 @@ services:
     #   context: .
     #   args:
     #     gethrepo: $GETH_REPO
-    environment:
-      - NODE_CLEAN_DATA=no
-      - NODE_INIT_ADDRESS=no
-      - NODE_INIT_GENESIS=no
-      - FAUCET_START_SERVER=no
-      - FAUCET_SALAS_PER_DROP=0.1
-      - FAUCET_TIMEOUT_IN_SECS=86400
-      - MINER_START_EID=no
-      - CONTRACT_COMPILE_AND_DEPLOY=no
-      - MINER_USE_3TH_PARTY_FOR_IP_ADDRESS=yes
-      - VERBOSITY=4
-      - SALAS_ENODES=none
-      - RPC_OPTIONS=
     env_file:
       - .env.secrets
       - .env      
     ports:
       - "31313:31313/tcp"
       - "31313:31313/udp"
-    entrypoint: /bin/bash -c
     volumes:
       - ./vol_conf:/salas/conf
       - ./vol_node_keystore:/salas/miner/keystore
       - ./vol_node_conf:/salas/miner/conf
       - ./vol_node_data:/salas/miner/ethereum_data
       - ./vol_faucet_session:/salas/faucet/session
+    entrypoint: /bin/bash /salas/conf/bootnode_conf_and_exec.sh
     command: >
-      "(pcscd) 
+      "(/usr/sbin/pcscd) 
       && (echo '********* CLEANING AND INITIALIZATION STEPS (starts in 5 secs) ********')
       && (sleep 1)
       && (cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner_address.sh && ./2_init_miner_genesis.sh)

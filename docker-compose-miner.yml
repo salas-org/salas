@@ -6,19 +6,6 @@ services:
     #   context: .
     #   args:
     #     gethrepo: $GETH_REPO
-    environment:
-      - NODE_CLEAN_DATA=no
-      - NODE_INIT_ADDRESS=no
-      - NODE_INIT_GENESIS=no
-      - FAUCET_START_SERVER=no
-      - FAUCET_SALAS_PER_DROP=0.1
-      - FAUCET_TIMEOUT_IN_SECS=86400
-      - MINER_START_EID=yes
-      - CONTRACT_COMPILE_AND_DEPLOY=no
-      - MINER_USE_3TH_PARTY_FOR_IP_ADDRESS=yes
-      - VERBOSITY=3
-      - RPC_OPTIONS=--http --http.port 8545 --http.addr 0.0.0.0 --http.vhosts '*' --http.corsdomain 'chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn' --http.api eth,net,web3,personal --allow-insecure-unlock
-      - SALAS_ENODES=enode://8c111ea8d3037c76b6e3a6196a830eb200f7ff753a2abdd7343174fbdd00bc81ae06ab6c1c999e0b5a5cff44c04a7ca300d2c1cd34dacda9bb0c33774182500a@51.159.184.213:31313
     env_file:
       - .env.secrets
       - .env      
@@ -26,7 +13,6 @@ services:
       - "31313:31313/tcp"
       - "31313:31313/udp"
       - "8545:8545"
-    entrypoint: /bin/bash -c
     volumes:
       - ./vol_conf:/salas/conf
       - ./vol_node_keystore:/salas/miner/keystore
@@ -34,8 +20,9 @@ services:
       - ./vol_node_data:/salas/miner/ethereum_data
       - ./vol_faucet_session:/salas/faucet/session
       - ./vol_node_eth_dags:/salas/ethash
+    entrypoint: /bin/bash /salas/conf/miner_conf_and_exec.sh
     command: >
-      "(pcscd) 
+      "(/usr/sbin/pcscd)
       && (echo '********* CLEANING AND INITIALIZATION STEPS (starts in 5 secs) ********')
       && (sleep 1)
       && (cd /salas/miner/ && ./1_clean_miner.sh && ./2_init_miner_address.sh && ./2_init_miner_genesis.sh)

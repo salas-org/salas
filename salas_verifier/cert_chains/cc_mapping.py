@@ -72,3 +72,7 @@ t7AcpwAmegkMNpgcgTd+qk2yljEaT8wf953jUAFedbpN3tX/3i+uvHOOmWjQOxJg
 -----END CERTIFICATE-----'''
     }
 }
+
+# adding the numbers to the mapping, not sure this is a good idea
+# to be discussed
+chain_id_mappings['02'] = chain_id_mappings['country_be_1']
