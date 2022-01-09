@@ -95,7 +95,7 @@ def retrieve_public_certificate():
 
     if not(os.path.isfile('./cert.pem')):
         with open('./cert.pem', "w") as f:
-            print(f"retrieving use certificate and converting to pem format")
+            print(f"retrieving user certificate and converting to pem format")
             # pkcs11-tool --pin 1234 --read-object --id 02 --type cert --output-file cert.der
             print(f"storing user certificate")  
             signing_process_1 = subprocess.run(["pkcs11-tool", f"-p{PIN}", 
@@ -105,7 +105,7 @@ def retrieve_public_certificate():
             # pipe the DER certificate in openssl to convert it to pem
             # openssl x509 -inform DER  -outform PEM
             signing_process_2 = subprocess.run(["openssl", "x509", 
-                                                "-inform", "DER", "-outform", "PEM", ">"], 
+                                                "-inform", "DER", "-outform", "PEM"], 
                                                 input=signing_process_1.stdout, 
                                                 stdout=f, stderr=subprocess.PIPE)
 
@@ -142,7 +142,7 @@ def main():
     # execute functions on the contract 
     ###################
     salas_contract = w3.eth.contract(address=SALAS_CONTRACT_ADDRESS, abi=abi)
-
+    
     # call a view
     cost_in_wei = salas_contract.functions.getCost().call()
     print(cost_in_wei)
@@ -159,8 +159,10 @@ def main():
     print("retrieving user certificate")
     user_pem_cert = retrieve_public_certificate()
     print(type(user_pem_cert))
+    print(user_pem_cert)
     user_pem_cert = user_pem_cert.splitlines()
     user_pem_cert_inner = "".join(user_pem_cert[1:-1])
+    print(user_pem_cert_inner)
     print("user certificate loaded")
 
     if w3.eth.get_balance(miner_address) < float(SALAS_CONTRACT_COST):

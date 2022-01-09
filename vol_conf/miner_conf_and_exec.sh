@@ -12,6 +12,6 @@ export CONTRACT_COMPILE_AND_DEPLOY="no"
 export MINER_USE_3TH_PARTY_FOR_IP_ADDRESS="yes"
 export VERBOSITY="3"
 export RPC_OPTIONS="--http --http.port 8545 --http.addr 0.0.0.0 --http.vhosts '*' --http.corsdomain 'chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn' --http.api eth,net,web3,personal --allow-insecure-unlock"
-export SALAS_ENODES="enode://8c111ea8d3037c76b6e3a6196a830eb200f7ff753a2abdd7343174fbdd00bc81ae06ab6c1c999e0b5a5cff44c04a7ca300d2c1cd34dacda9bb0c33774182500a@51.159.184.213:31313"
+export SALAS_ENODES="enode://41cdc7595a8207e8d764372e5a0b127f21e09b5f9317dba6eaaefc9fca48fa92926ab4050225f297c81f4bc35db88472c7b54ba874ecd507e4e8284a77c20870@51.159.184.213:31313"
 
 /bin/bash -c "$@"

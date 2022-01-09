@@ -28,7 +28,7 @@ NR_BLOCKS_TO_GO_BACK_TO_SIGN_MODULO = config.getint('key block', 'NR_BLOCKS_TO_G
 
 CONTRACT_PATH= PATH_ + '/salas_contract.sol'
 SLACK_ON_OFFSET_FOR_KEYBLOCK = 4
-VERIFY_ID_FROM_BLOCK_NR = 250
+VERIFY_ID_FROM_BLOCK_NR = 515
 
 # Instantiate the parser
 parser = argparse.ArgumentParser(description='Python program to check if the miner is okay')
@@ -179,7 +179,7 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
     try:
         OpenSSL.crypto.verify(parsed_cert
             , bytes_signature
-            , '0x' + other_miner_etherbase, 
+            , bytes('0x' + other_miner_etherbase, 'utf-8'), 
             'sha1')
 
     except Exception as err:
@@ -192,8 +192,9 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
     # Check whether the mined block extradata is the key block hash that is signed by the same private key
     ###################
 
-    # first remove the prefix
-    signed_key_block_hash = signed_key_block_hash[8:]
+    # first remove the prefix, and some single quotes that are lingering
+    # TODO: remove the quotes only when present inthe signed_key_block_hash
+    signed_key_block_hash = signed_key_block_hash[9:-1]
     signed_key_block_hash_base64 = signed_key_block_hash.encode('ascii')
     signed_key_block_hash_bytes = base64.b64decode(signed_key_block_hash_base64)
 
@@ -203,11 +204,11 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
     try:
         # Get the hex(base64(sign(hex(hash of the key block))))
         mined_key_block_nr_ideally = calc_block_to_sign(mined_block_nr)
-        mined_key_block_hash_in_hex_ideally = w3.eth.get_block(mined_key_block_nr_ideally).hash.hex()
+        mined_key_block_hash_ideally = w3.eth.get_block(mined_key_block_nr_ideally).hash.hex()
 
         OpenSSL.crypto.verify(parsed_cert
             , signed_key_block_hash_bytes
-            , mined_key_block_hash_in_hex_ideally, 
+            , bytes(mined_key_block_hash_ideally, 'utf-8'), 
             'sha1')
         succes_key_block = True
 
@@ -221,11 +222,11 @@ def ethereum_handler(other_miner_etherbase, mined_block_nr, signed_key_block_has
 
             # Get the hex(base64(sign(hex(hash of the key block))))
             mined_key_block_nr_ideally = calc_block_to_sign(mined_block_nr-SLACK_ON_OFFSET_FOR_KEYBLOCK)
-            mined_key_block_hash_in_hex_ideally = w3.eth.get_block(mined_key_block_nr_ideally).hash.hex()
+            mined_key_block_hash_ideally = w3.eth.get_block(mined_key_block_nr_ideally).hash.hex()
 
             OpenSSL.crypto.verify(parsed_cert
                 , signed_key_block_hash_bytes
-                , mined_key_block_hash_in_hex_ideally, 
+                , bytes(mined_key_block_hash_ideally, 'utf-8'), 
                 'sha1')
             succes_key_block_with_offset = True
                 
